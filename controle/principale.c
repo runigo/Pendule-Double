@@ -1,15 +1,25 @@
 #include "../controle/principale.h"
 
-pendule_t penduleCreation(double masse, double longueur, double theta_actuel, double theta_intermed) {
+pendule_t penduleCreation(double masse, double longueur, double theta_actuel, double theta_intermed)
+{
     pendule_t p;
     
-    p.masse    = masse;
-    p.longueur  = longueur;
+    p.masse             = masse;
+    p.longueur          = longueur;
     p.theta_actuel      = theta_actuel;
     p.theta_intermed    = theta_intermed;
     
-    p.coord.x = 0;
-    p.coord.y = 0;
+    return p;
+}
+
+points_t pointsCreation(void)
+{
+    points_t p;
+
+    p.coord1.x = 0;
+    p.coord1.y = 0;
+    p.coord2.x = 0;
+    p.coord2.y = 0;
     
     return p;
 }
@@ -54,26 +64,27 @@ int projectionSecondY(pendule_t p1, pendule_t p2) {
     return (int)(projectionPremierY(p1) + cos(p2.theta_actuel) * p2.longueur);
 }
 
-void projectionPendules(pendule_t *p1, pendule_t *p2) {
-    p1->coord.x = (int)projectionPremierX(*p1);
-    p1->coord.y = (int)projectionPremierY(*p1);
+void projectionPendules(pendule_t *p1, pendule_t *p2, points_t *p)
+{
+    p->coord1.x = (int)projectionPremierX(*p1);
+    p->coord1.y = (int)projectionPremierY(*p1);
     
-    p2->coord.x = (int)projectionSecondX(*p1, *p2);
-    p2->coord.y = (int)projectionSecondY(*p1, *p2);
+    p->coord2.x = (int)projectionSecondX(*p1, *p2);
+    p->coord2.y = (int)projectionSecondY(*p1, *p2);
 }
 
-void dessinPendules(SDL_Renderer *rendu, pendule_t p1, pendule_t p2) {    
-    int x1 = p1.coord.x;
-    int y1 = p1.coord.y;
+void dessinPendules(SDL_Renderer *rendu, points_t p) {    
+    int x1 = p.coord1.x;
+    int y1 = p.coord1.y;
     
-    int x2 = p2.coord.x;
-    int y2 = p2.coord.y;
+    int x2 = p.coord2.x;
+    int y2 = p.coord2.y;
     
     int xoffset = 1;
     
     SDL_SetRenderDrawColor(rendu, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
-    SDL_Point points[3] = {
+    SDL_Point points1[3] = {
         {LARGEUR/2, HAUTEUR/2},
         {x1,    y1},
         {x2,    y2}
@@ -85,16 +96,16 @@ void dessinPendules(SDL_Renderer *rendu, pendule_t p1, pendule_t p2) {
         {x2 + xoffset,    y2}
     };
     
-    SDL_RenderDrawLines(rendu, points, 3);
+    SDL_RenderDrawLines(rendu, points1, 3);
     SDL_RenderDrawLines(rendu, points2, 3);
 }
 
-void dessinChemin(SDL_Renderer *rendu, pendule_t p) {
+void dessinChemin(SDL_Renderer *rendu, points_t p) {
     static SDL_Point point[2048] = {{0}};
     static int       i = 0;
     
-    point[i].x = p.coord.x;
-    point[i].y = p.coord.y;
+    point[i].x = p.coord2.x;
+    point[i].y = p.coord2.y;
     
     if(++i > 2048)
         i = 0;
@@ -143,6 +154,7 @@ int main(int argc, char *argv[]) {
     
     pendule_t p1 = penduleCreation(100, 120, reelAleatoire(0, 1) * PI * 2, (reelAleatoire(0, 1) - 0.5) * 2);
     pendule_t p2 = penduleCreation(100, 120, reelAleatoire(0, 1) * PI * 2, (reelAleatoire(0, 1) - 0.5) * 2);
+    points_t p = pointsCreation();
     
     while(continu) {
         while(SDL_PollEvent(&evenement)) {
@@ -195,13 +207,13 @@ int main(int argc, char *argv[]) {
     
         penduleEvolution(&p1, &p2);        
        
-        projectionPendules(&p1, &p2);
+        projectionPendules(&p1, &p2, &p);
         
         SDL_SetRenderDrawColor(rendu, 255, 255, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(rendu);
         
-        dessinPendules(rendu, p1, p2);
-        dessinChemin(rendu, p2);
+        dessinPendules(rendu, p);
+        dessinChemin(rendu, p);
         
         SDL_RenderPresent(rendu);
     

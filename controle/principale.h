@@ -23,10 +23,13 @@ struct Pendule_t {
     
     double theta_actuel;
     double theta_intermed;
-    
-    SDL_Point coord;
 };
-
 typedef struct Pendule_t pendule_t;
+
+struct Points_t {
+    SDL_Point coord1;
+    SDL_Point coord2;
+};
+typedef struct Points_t points_t;
 
 #endif

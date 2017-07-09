@@ -2,7 +2,7 @@
 # runigo@free.fr
 # 
 # Ce logiciel est un réusinage du programme de simulation du pendule double
-# de Raphaël Chartier
+# de Raphaël Chartier, en vue d'une migration de SiCP vers SDL2.
 #
 # Ce logiciel est régi par la licence CeCILL soumise au droit français et 
 # respectant les principes de diffusion des logiciels libres. Vous pouvez 
