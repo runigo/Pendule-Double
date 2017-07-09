@@ -1,16 +1,7 @@
 #ifndef _PRINCIPALE_
 #define _PRINCIPALE_
 
-#include "../donnees/constantes.h"
-
-struct Pendule_t {
-    double masse;
-    double longueur;
-    
-    double theta_actuel;
-    double theta_intermed;
-};
-typedef struct Pendule_t pendule_t;
+#include "../modele/pendule.h"
 
 struct Points_t {
     SDL_Point coord1;

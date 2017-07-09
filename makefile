@@ -11,11 +11,14 @@ OBJDIR = ./obj
 
 all : $(EXEC)
 
-$(EXEC) : $(OBJDIR)/principale.o
-	$(CC) -g  $(OBJDIR)/principale.o ` sdl2-config --libs` $(LDFLAGS) -o $(EXEC)
+$(EXEC) : $(OBJDIR)/principale.o $(OBJDIR)/pendule.o
+	$(CC) -g  $(OBJDIR)/principale.o $(OBJDIR)/pendule.o ` sdl2-config --libs` $(LDFLAGS) -o $(EXEC)
 
 $(OBJDIR)/principale.o : controle/principale.c controle/principale.h
 	$(CC) -c -g controle/principale.c $(CFLAGS) -o $@
+
+$(OBJDIR)/pendule.o : modele/pendule.c modele/pendule.h
+	$(CC) -c -g modele/pendule.c $(CFLAGS) -o $@
 
 clean :
 	rm $(OBJDIR)/*.o
