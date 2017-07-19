@@ -11,6 +11,7 @@ struct InterfaceT {
 	SDL_Renderer *rendu;
 	SDL_Event evenement;
     bool continu;
+	int fond;
 };
 
 int interfaceInitialisation(interfaceT * interface);
