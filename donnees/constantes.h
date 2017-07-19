@@ -9,8 +9,6 @@
 
 #include <math.h>
 
-#include <SDL2/SDL.h>
-
 #define LARGEUR  720
 #define HAUTEUR 720
 

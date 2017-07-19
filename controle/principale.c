@@ -8,63 +8,28 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
     
-    assert(SDL_Init(SDL_INIT_VIDEO) == 0);
+    interfaceT interface;
     
-    SDL_Window   *fenetre = NULL;
-    SDL_Renderer *rendu = NULL;
-    SDL_Event     evenement;
-    
-    bool          continu = true;
- 
-    assert(SDL_CreateWindowAndRenderer(LARGEUR, LARGEUR, 0, 
-                                       &fenetre, &rendu) == 0);
- 
+	interfaceInitialisation(&interface);
+
     srand(time(NULL));
     
     pendule_t p1 = penduleCreation(100, 120, reelAleatoire(0, 1) * PI * 2, (reelAleatoire(0, 1) - 0.5) * 2);
     pendule_t p2 = penduleCreation(100, 120, reelAleatoire(0, 1) * PI * 2, (reelAleatoire(0, 1) - 0.5) * 2);
     points_t p = pointsCreation();
     
-    while(continu) {
-        while(SDL_PollEvent(&evenement)) {
-            if(evenement.type == SDL_QUIT) {
-                continu = false;
+    while(interface.continu) {
+        while(SDL_PollEvent(&interface.evenement)) {
+            if(interface.evenement.type == SDL_QUIT) {
+                interface.continu = false;
             }
             
-            switch(evenement.type) {
+            switch(interface.evenement.type) {
                 case SDL_QUIT:
-                continu = false;
+                interface.continu = false;
                 break;
                 case SDL_KEYDOWN:
-                switch(evenement.key.keysym.sym) {
-                case SDLK_a:
-                    p1.longueur -= 1;
-                    break;
-                case SDLK_z:
-                    p1.longueur += 1;
-                    break;
-                case SDLK_e:
-                    p2.longueur -= 1;
-                    break;
-                case SDLK_r:
-                    p2.longueur += 1;
-                    break;
-                case SDLK_q:
-                    p1.masse -= 5;
-                    break;
-                case SDLK_s:
-                    p1.masse += 5;
-                    break;
-                case SDLK_d:
-                    p2.masse -= 5;
-                    break;
-                case SDLK_f:
-                    p2.masse += 5;
-                    break;
-                case SDLK_n:
-                    p1 = penduleCreation(100, 120, reelAleatoire(0, 1) * PI * 2, (reelAleatoire(0, 1) - 0.5) * 2);
-                    p2 = penduleCreation(100, 120, reelAleatoire(0, 1) * PI * 2, (reelAleatoire(0, 1) - 0.5) * 2);
-                    break;
+                switch(interface.evenement.key.keysym.sym) {
                 case SDLK_i:
                     penduleAffiche(p1, 1);
                     penduleAffiche(p2, 2);
@@ -73,25 +38,24 @@ int main(int argc, char *argv[]) {
                 break;
             }
         }
-    
+    		// Évolution temporelle
         penduleEvolution(&p1, &p2);        
-       
+
+			// Projection angle > entier
         projectionPendules(&p1, &p2, &p);
+
+
+			// 
+	interfaceNettoyage(&interface);
         
-        SDL_SetRenderDrawColor(rendu, 255, 255, 255, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(rendu);
+        pointsPendules(interface.rendu, p);
+        pointsChemin(interface.rendu, p);
         
-        dessinPendules(rendu, p);
-        dessinChemin(rendu, p);
-        
-        SDL_RenderPresent(rendu);
+	interfaceMiseAJour(&interface);
     
         SDL_Delay(5);
     }
     
-    SDL_DestroyRenderer(rendu);
-    SDL_DestroyWindow(fenetre);
-    
-    SDL_Quit();
+	interfaceDestruction(&interface);
     return 0;
 }

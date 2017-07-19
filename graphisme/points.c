@@ -1,4 +1,4 @@
-#include "../projection/points.h"
+#include "points.h"
 
 points_t pointsCreation(void)
 {
@@ -12,7 +12,7 @@ points_t pointsCreation(void)
     return p;
 }
 
-void dessinPendules(SDL_Renderer *rendu, points_t p) {    
+void pointsPendules(SDL_Renderer *rendu, points_t p) {    
     int x1 = p.coord1.x;
     int y1 = p.coord1.y;
     
@@ -39,7 +39,7 @@ void dessinPendules(SDL_Renderer *rendu, points_t p) {
     SDL_RenderDrawLines(rendu, points2, 3);
 }
 
-void dessinChemin(SDL_Renderer *rendu, points_t p) {
+void pointsChemin(SDL_Renderer *rendu, points_t p) {
     static SDL_Point point[2048] = {{0}};
     static int       i = 0;
     
