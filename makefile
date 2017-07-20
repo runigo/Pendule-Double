@@ -11,11 +11,14 @@ OBJDIR = ./obj
 
 all : $(EXEC)
 
-$(EXEC) : $(OBJDIR)/principale.o $(OBJDIR)/projection.o $(OBJDIR)/points.o $(OBJDIR)/interface.o $(OBJDIR)/pendule.o
-	$(CC) -g  $(OBJDIR)/principale.o $(OBJDIR)/projection.o $(OBJDIR)/points.o $(OBJDIR)/interface.o $(OBJDIR)/pendule.o ` sdl2-config --libs` $(LDFLAGS) -o $(EXEC)
+$(EXEC) : $(OBJDIR)/principale.o $(OBJDIR)/controleur.o $(OBJDIR)/projection.o $(OBJDIR)/points.o $(OBJDIR)/interface.o $(OBJDIR)/pendule.o
+	$(CC) -g  $(OBJDIR)/principale.o $(OBJDIR)/controleur.o $(OBJDIR)/projection.o $(OBJDIR)/points.o $(OBJDIR)/interface.o $(OBJDIR)/pendule.o ` sdl2-config --libs` $(LDFLAGS) -o $(EXEC)
 
 $(OBJDIR)/principale.o : controle/principale.c controle/principale.h
 	$(CC) -c -g controle/principale.c $(CFLAGS) -o $@
+
+$(OBJDIR)/controleur.o : controle/controleur.c controle/controleur.h
+	$(CC) -c -g controle/controleur.c $(CFLAGS) -o $@
 
 $(OBJDIR)/projection.o : projection/projection.c projection/projection.h
 	$(CC) -c -g projection/projection.c $(CFLAGS) -o $@
