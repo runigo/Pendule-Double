@@ -60,7 +60,7 @@ srand(time(NULL));
 
 	interfaceMiseAJour(&(*controleur).interface);
 
-	SDL_Delay(25);
+	SDL_Delay(5);
     }
     return 0;
 }
